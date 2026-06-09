@@ -1,0 +1,12 @@
+annotated-types==0.7.0
+joblib==1.5.3
+narwhals==2.22.1
+numpy==2.4.6
+packaging==26.2
+pydantic==2.13.4
+pydantic_core==2.46.4
+scikit-learn==1.9.0
+scipy==1.17.1
+threadpoolctl==3.6.0
+typing-inspection==0.4.2
+typing_extensions==4.15.0

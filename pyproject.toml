@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=82.0", "wheel>=0.47.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neural-net"
+description = "Neural_net is a deep learning tool for building simple to medium sized neural networks, it supports multiple configurations and arguments for training"
+version = "0.1.0"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [
+    { name = "Olewuenyi Emmanuel" }
+]
+keywords = ["neural network", "deep learning", "numpy", "machine learning"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=2.4.6",
+    "pydantic>=2.13.4",
+    "joblib>=1.5.3",
+    "typing_extensions>=4.15.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "scikit-learn>=1.9.0",
+    "scipy>=1.17.1",
+    "narwhals>=2.22.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/ocedev112"
+Repository = "https://github.com/ocedev112/neural-net"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
