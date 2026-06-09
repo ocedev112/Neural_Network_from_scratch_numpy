@@ -43,7 +43,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/ocedev112"
-Repository = "https://github.com/ocedev112/Neural_Network_from_scratch_numpy
+Repository = "https://github.com/ocedev112/Neural_Network_from_scratch_numpy"
 
 [tool.setuptools.packages.find]
 where = ["src"]
