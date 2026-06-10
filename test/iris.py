@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
  
-from src.neural_net.nn import NeuralNetwork, TrainArg
+from src.neonet.nn import NeuralNetwork, TrainArg
 from sklearn.datasets import load_iris
 import numpy as np
  
