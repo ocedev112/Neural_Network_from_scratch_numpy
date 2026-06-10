@@ -93,8 +93,9 @@ class NeuralNetwork():
              z = np.clip(z, -500, 500)
              return np.atleast_1d(1 / (1 + np.exp(-z)))
         if sign == "Softmax":
-            e = np.exp(z - np.max(z))
-            return np.atleast_1d(e / e.sum())
+            z = np.atleast_2d(z)
+            e = np.exp(z - np.max(z, axis=1, keepdims=True))
+            return e / e.sum(axis=1, keepdims=True)
         if sign == "Tanh":
              return np.atleast_1d(np.tanh(z)) 
         if sign == "Swish":
@@ -102,16 +103,16 @@ class NeuralNetwork():
         if sign == "None":
              return np.atleast_1d(z)
            
-      def __forward(self,input, weight_matrix, bias_matrix,idx,isTraining, training_layers):
+      def __forward(self,inputs, weight_matrix, bias_matrix,idx,isTraining, training_layers):
           layer_dict = {}
           weight = weight_matrix[idx-1]
           bias = bias_matrix[idx-1]
-          layer = np.matmul(input, weight)
+          layer = np.matmul(inputs, weight)
           layer = (layer + bias)
           activation_sign = self.layers[idx-1][1]
           activated_layer = self.activation(activation_sign, layer)
           if isTraining:
-               layer_dict["input"] = input
+               layer_dict["input"] = inputs
                layer_dict["weight"] = weight
                layer_dict["bias"] = bias
                layer_dict["z_layer"] = layer
@@ -128,12 +129,10 @@ class NeuralNetwork():
           return self.__forward(activated_layer, self.weight_matrix, self.bias_matrix, idx, isTraining, training_layers)
            
       def __forward_pass(self,inputs, train_mode=False):
-           outputs = []
-           for input in inputs:
-                training_layers = []         
-                output = self.__forward(input, self.weight_matrix, self.bias_matrix, 1, train_mode, training_layers)
-                if output is not None:
-                     outputs.append(output)
+           training_layers = []
+           outputs = self.__forward(np.array(inputs), self.weight_matrix, self.bias_matrix, 1, train_mode, training_layers)
+           if train_mode:
+                 return outputs[0], outputs[1] 
            return outputs
 
       def derivate_activation(self,sign, a):
@@ -162,7 +161,7 @@ class NeuralNetwork():
             predicted_output = np.clip(predicted_output, 1e-7, 1 - 1e-7)
             real_output = np.array(real_output)
             diff = -(real_output / predicted_output) + (1 - real_output) / (1 - predicted_output)
-            return np.atleast_1d(np.clip(diff, -10, 10)).squeeze()
+            return np.atleast_1d(np.clip(diff, -10, 10))
         if loss == "Huber":
                delta = 1.0
                diff = predicted_output - real_output
@@ -184,11 +183,11 @@ class NeuralNetwork():
                  else:
                      prev_weights = layer_dict[real_lay_idx+1]["weight"]
                      v_layer = layer_dict[real_lay_idx+1]["v_layer"]
-                     in_v = np.dot(prev_weights, v_layer)                         
+                     in_v = np.dot(v_layer, prev_weights.T)                         
                      dadz = self.derivate_activation(layer["activation_sign"], layer["activated_layer"])
                      v_matrix = dadz * in_v
-                 cost_weight = np.outer(layer["input"], v_matrix)
-                 cost_bias = v_matrix
+                 cost_weight = np.dot(layer["input"].T, v_matrix)  / len(v_matrix)
+                 cost_bias = v_matrix.mean(axis=0)
 
                  layer["v_layer"] = v_matrix
                  cost_weight_matrix.append(cost_weight)
@@ -227,11 +226,11 @@ class NeuralNetwork():
           self.weight_matrix[-(i+1)] -= (m_w_hat / (np.sqrt(v_w_hat) + ep) + reg_w) * learning_rate
           self.bias_matrix[-(i+1)]   -= (m_b_hat / (np.sqrt(v_b_hat) + ep) + reg_b) * learning_rate
 
-      def batch_data(self, outputs, batch_size):
+      def batch_data(self, inputs, outputs, batch_size):
           if batch_size is None:
-               batch_size = len(outputs)
+              batch_size = len(outputs)
           for i in range(0, len(outputs), batch_size):
-               yield outputs[i:i+batch_size]
+             yield np.array(inputs[i:i + batch_size]), np.array(outputs[i:i + batch_size])
                   
       def train(self, inputs, real_output, training_args=None, eval_dataset=None, check_loss=False):
              if  len(inputs) != len(real_output):
@@ -269,20 +268,15 @@ class NeuralNetwork():
              t = 0
              base_lr = learning_rate
              for epoch in range(epochs):
-               outputs = self.__forward_pass(inputs, True)
                cost_weight_list = []
                cost_bias_list = []
                if training_args is not None and training_args.use_decay:
                     decay = 1 / (1 + 0.001 * epoch)
                     learning_rate = base_lr  * decay 
                global_idx = 0
-               for outputs_batch in self.batch_data(outputs, batch_size): 
-                 for idx, (output, layer_dict) in enumerate(outputs_batch):
-                  label = real_output[global_idx]      
-                  global_idx += 1
-                  if len(output) != len(label):
-                        raise ValueError("Y value must be the same length as predicted value")
-                  cost_weight_matrix, cost_bias_matrix = self.__backprop(layer_dict, label, loss)
+               for X_batch, y_batch in self.batch_data(inputs, real_output, batch_size):
+                  output, layer_dict = self.__forward_pass(X_batch, train_mode=True)
+                  cost_weight_matrix, cost_bias_matrix = self.__backprop(layer_dict, y_batch, loss)
                   if training_args == None or  training_args.optimizer == "GD":
                     cost_weight_list.append(cost_weight_matrix)
                     cost_bias_list.append(cost_bias_matrix)
@@ -332,7 +326,7 @@ class NeuralNetwork():
 
              
       def predict(self, inputs):
-              outputs = self.__forward_pass(inputs, False)
+              outputs = self.__forward_pass(np.array(inputs), False)
               return  outputs
       
       def save(self, path):
