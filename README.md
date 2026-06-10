@@ -1,4 +1,4 @@
-#Neonet
+# Neonet
 Neonet is a new deep learning library that can be used for  for building 
 small to medium scale neural networks, with small to medium sized datasts
 .it supports multiple training arguments for training
@@ -20,16 +20,16 @@ nn = NeuralNetwork(4, [(16, "LeakyReLU"), (8, "LeakyReLU"), (3, "Softmax")])
 ```
 
 Training arguments
--batch_size
--learning_rate
--optimizer
--regularizee
--alphq
--lasso
--b1 coefficient
--b2 coefficient
--epochs
--use_decay
+- batch_size
+- learning_rate
+- optimizer
+- regularizer
+- alpha
+- lasso
+- b1 coefficient
+- b2 coefficient
+- epochs
+- use_decay
 
 
 ```python
