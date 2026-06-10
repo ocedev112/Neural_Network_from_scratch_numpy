@@ -48,10 +48,10 @@ to train:
 nn.train(X_train, y_train, training_args=training_args, eval_dataset=[X_test, y_test], check_loss=True)
 ```
 ## Features
-	-	Dense neural network architecture
-	-	Multiple activation functions
-	-	Mini-batch training
-	-	Learning rate decay
-	-	Model evaluation during training
-	-	Configurable optimizers and regularizers
+-	Dense neural network architecture
+-	Multiple activation functions
+-	Mini-batch training
+-	Learning rate decay
+-	Model evaluation during training
+-	Configurable optimizers and regularizers
 
