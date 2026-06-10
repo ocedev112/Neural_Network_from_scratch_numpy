@@ -3,8 +3,8 @@ requires = ["setuptools>=82.0", "wheel>=0.47.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neural-net"
-description = "Neural_net is a deep learning tool for building simple to medium sized neural networks, it supports multiple configurations and arguments for training"
+name = "neonet"
+description = "Neonet is a deep learning tool for building simple to medium sized neural networks, it supports multiple configurations and arguments for training"
 version = "0.1.0"
 readme = "README.md"
 license = "MIT"
