@@ -1,6 +1,6 @@
 # Neonet (Neural Network with Numpy)
 
-Neonet is a lightweight NumPy-based neural network library for building and experimenting with simple deep learning models. It is designed for small and medium scale projects, prototyping, and understanding core neural network workflows without relying on large frameworks like TensorFlow or PyTorch..
+Neonet is a lightweight NumPy-based neural network library for building and experimenting with simple deep learning models. It is designed for small and medium scale projects, prototyping, and understanding core neural network workflows without relying on large frameworks like TensorFlow or PyTorch.
 
 ## Features
 
