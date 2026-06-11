@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "neonet"
 description = "Neonet is a deep learning tool for building simple to medium sized neural networks, it supports multiple configurations and arguments for training"
-version = "0.2.0"
+version = "0.2.1"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
