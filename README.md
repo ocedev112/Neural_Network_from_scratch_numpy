@@ -130,7 +130,7 @@ Neonet is suitable for:
 
 Unlike large deep learning frameworks, Neonet focuses on simplicity, transparency, and educational value. The library makes it easier to understand the mechanics of forward propagation, backpropagation, optimization, and regularization while still providing practical training capabilities.
 
-#Contributing
+## Contributions
 
 Contributions, bug reports, and feature requests are welcome. Feel free to open an issue or submit a pull request.
 
