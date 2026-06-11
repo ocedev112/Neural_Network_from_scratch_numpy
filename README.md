@@ -65,14 +65,37 @@ logging_steps=100,
 use_decay=True
 )
 ```
+## Train a Model
 
-to train:
+Train your neural network and evaluate performance. 
+
 ```python
 nn.train(X_train, y_train, training_args=training_args, eval_dataset=[X_test, y_test], check_loss=True)
 ```
-# Supported Components
 
-# Activation Functions
+## Predictions
+
+Make predictions with your model:
+
+```python
+nn.predict(x)
+```
+
+## Save and load your model
+
+save your model after training or load a trained model
+
+```python
+# to save
+nn.save("model.joblib")
+# to load
+nn.load("model.joblib")
+```
+
+
+## Supported Components
+
+### Activation Functions
 - ReLU
 - LeakyReLU
 - ELU
@@ -80,19 +103,19 @@ nn.train(X_train, y_train, training_args=training_args, eval_dataset=[X_test, y_
 - Tanh
 - Softmax
 
-# Initialization
+### Initialization
 - Xavier
 - He
 
-# Optimization Methods
+### Optimization Methods
 - SGD
 - Adam loss
 
-# Regularization Methods
+### Regularization Methods
 - L1 Regularization(Lasso)
 - L2 Regularization(Ridge)
 
-# Use case
+## Use case
 
 Neonet is suitable for:
 
@@ -103,7 +126,7 @@ Neonet is suitable for:
 - Running lightweight models on CPU-only environments
 - Exploring neural network behavior through a NumPy-based implementation
 
-#Why Neonet?
+## Why Neonet?
 
 Unlike large deep learning frameworks, Neonet focuses on simplicity, transparency, and educational value. The library makes it easier to understand the mechanics of forward propagation, backpropagation, optimization, and regularization while still providing practical training capabilities.
 
