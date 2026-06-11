@@ -231,6 +231,20 @@ class NeuralNetwork():
               batch_size = len(outputs)
           for i in range(0, len(outputs), batch_size):
              yield np.array(inputs[i:i + batch_size]), np.array(outputs[i:i + batch_size])
+
+      def loss_function(self,pred, real, loss):
+         if loss == "MSE":
+              return ((real - pred)**2).mean(axis=1).sum(axis=0)
+         if loss == "MAE":
+              return np.abs((real - pred)).mean(axis=1).sum(axis=0)
+         if loss == "BCE":
+              ep = 1e-15
+              pred = np.clip(pred, ep, 1 - ep)
+              return -(real * np.log(pred) + (1 - real) * np.log(1 - pred)).mean(axis=1).sum(axis=0)
+         if loss == "Huber":
+             delta = 1.0
+             diff = np.abs(real - pred)
+             return np.where(diff < delta, 0.5 * diff**2, delta * diff - 0.5 * delta**2)
                   
       def train(self, inputs, real_output, training_args=None, eval_dataset=None, check_loss=False):
              if  len(inputs) != len(real_output):
@@ -313,16 +327,24 @@ class NeuralNetwork():
                
                if check_loss:
                  if training_args is not None and training_args.logging_steps is not None:
+                   bold = "\033[1m"
+                   bold_end = "\033[0m"
                    if epoch % training_args.logging_steps == 0:      
                     train_sample = len(inputs) // 4
                     train_ouputs = self.predict(inputs[:train_sample])
-                    train_loss = sum([np.sum((np.array(o) - np.array(y))**2) for o, y in zip(train_ouputs, real_output[:train_sample])])
-                    print(f"Epoch {epoch} Loss: {round(train_loss, 4)}")
+                    real_array = np.array(train_ouputs)
+                    pred_array = np.array(real_output[:train_sample])
+                    train_loss = self.loss_function(pred_array, real_array, loss)
+                    print(f"{bold}Epoch {epoch}/{epochs}{bold_end} ---- Loss: {round(train_loss, 4)}")
                     if eval_dataset is not None:
                       test_sample = len(inputs) // 4
                       test_outputs  = self.predict(eval_dataset[0][:test_sample])
-                      test_loss = sum([np.sum((np.array(o) - np.array(y))**2) for o, y in zip(test_outputs, eval_dataset[1][:test_sample])])
-                      print(f"Epoch {epoch} Val Loss: {round(test_loss, 4)}")
+                      pred_array_test = np.array(test_outputs)
+                      real_array_test = np.array(eval_dataset[1][:test_sample])
+                      test_loss = self.loss_function(pred_array_test, real_array_test, loss)
+                      bold = "\033[1m"
+                      bold_end = "\033[0m"
+                      print(f"{bold}Epoch {epoch}/{epochs}{bold_end} ---- Val Loss: {round(test_loss, 4)}")
 
              
       def predict(self, inputs):
