@@ -1,4 +1,5 @@
 # Neonet (Neural Network with Numpy)
+
 Neonet is a lightweight NumPy-based neural network library for building and experimenting with simple deep learning models. It is designed for small and medium scale projects, prototyping, and understanding core neural network workflows without relying on large frameworks like TensorFlow or PyTorch..
 
 ## Features
@@ -40,7 +41,7 @@ nn = NeuralNetwork(4, [(16, "LeakyReLU"), (8, "LeakyReLU"), (3, "Softmax")])
 
 ## Training Configurations
 
-Neonet allows you to configure various training parameters, including: 
+Neonet allows you to configure various training parameters, including:
 
 - Batch size
 - Learning rate
@@ -52,22 +53,23 @@ Neonet allows you to configure various training parameters, including:
 - Number of epochs
 - Learning rate decay
 
-
 Example
+
 ```python
-training_args = TrainArg( 
-batch_size=16, 
-learning_rate=0.001, 
-optimizer="adams_loss", 
+training_args = TrainArg(
+batch_size=16,
+learning_rate=0.001,
+optimizer="adams_loss",
 loss="MSE",
-epochs=500, 
-logging_steps=100, 
+epochs=500,
+logging_steps=100,
 use_decay=True
 )
 ```
+
 ## Train a Model
 
-Train your neural network and evaluate performance. 
+Train your neural network and evaluate performance.
 
 ```python
 nn.train(X_train, y_train, training_args=training_args, eval_dataset=[X_test, y_test], check_loss=True)
@@ -92,10 +94,10 @@ nn.save("model.joblib")
 nn.load("model.joblib")
 ```
 
-
 ## Supported Components
 
 ### Activation Functions
+
 - ReLU
 - LeakyReLU
 - ELU
@@ -104,14 +106,17 @@ nn.load("model.joblib")
 - Softmax
 
 ### Initialization
+
 - Xavier
 - He
 
 ### Optimization Methods
+
 - SGD
 - Adam loss
 
 ### Regularization Methods
+
 - L1 Regularization(Lasso)
 - L2 Regularization(Ridge)
 
@@ -133,6 +138,3 @@ Unlike large deep learning frameworks, Neonet focuses on simplicity, transparenc
 ## Contributions
 
 Contributions, bug reports, and feature requests are welcome. Feel free to open an issue or submit a pull request.
-
-
-
