@@ -1,6 +1,6 @@
 Neonet is deep learning library built with numpy, used for creating neural networks.\
 that can be used for small to medium scale Deep learning task.it supports \
-multiple training configurations and optimizers \
+multiple training configurations and optimizers 
 
 
 **Features**
