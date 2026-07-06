@@ -14,3 +14,5 @@ multiple training configurations and optimizers\
 - Configurable regularization techniques
 - Suitable for educational and research purposes
 - Lightweight and easy to use
+
+
